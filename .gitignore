@@ -1,0 +1,57 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Node modules (самое важное!)
+node_modules/
+
+# Дистрибутивы (сборка проекта)
+dist/
+dist-ssr/
+*.local
+
+# Переменные окружения (секреты не должны попасть в репозиторий)
+.env
+.env.local
+.env.*.local
+# Если используете Vue CLI, иногда нужно игнорировать .env.production и т.д., 
+# но обычно .env.*.local достаточно.
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Windows specific files
+Thumbs.db
+*.exe
+*.dll
+*.obj
+*.o
+*.a
+*.lib
+*.so
+*.dylib
+*.cache
+*.ics
+.DS_Store
+
+# Типографические файлы (если вдруг создадутся)
+*.ttf
+*.otf
+*.woff
+*.woff2
+!src/assets/fonts/* # Но шрифты в исходниках оставляем
+
+
+node_modules/
