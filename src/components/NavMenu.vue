@@ -4,6 +4,7 @@
     <router-link to="/posts">Посты</router-link>
     <router-link to="/register">регистрация</router-link>
     <router-link to="/confirm">подтверждение</router-link>
+    <router-link to="/new-home">Главная</router-link>
   </nav>
 </template>
 
