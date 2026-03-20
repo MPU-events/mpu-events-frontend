@@ -13,7 +13,7 @@ const routes = [
   {
     path: '/home',
     name: 'Home_posts',
-    component: () => import('../view/Home.vue')
+    component: () => import('../views/Home.vue')
   },
   {
     path: '/new-home',
