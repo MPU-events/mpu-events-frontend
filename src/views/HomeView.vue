@@ -1,163 +1,153 @@
 <template>
-  <div class="app-container" :class="{ 'mobile-view': isMobile }">
-    <div class="container-fluid">
-      <div class="row">
-        <!-- Боковая панель -->
-        <div 
-          class="col-md-3 col-lg-2 sidebar" 
-          :class="{ 'active': sidebarActive }"
-          @click.self="closeSidebarOnMobile"
+  <div class="app-container">
+    <!-- Боковая панель -->
+    <div class="sidebar" :class="{ 'active': sidebarActive }">
+      <button 
+        class="menu-toggle d-md-none" 
+        @click="toggleSidebar"
+      >
+        <i class="bi bi-list"></i>
+      </button>
+      
+      <div class="logo-section">
+        <div class="logo">АФИША</div>
+      </div>
+      
+      <div class="nav-section">
+        <!-- Главная -->
+        <a 
+          href="#" 
+          class="nav-item"
+          :class="{ active: activeNav === 'home' }"
+          @click.prevent="setActiveNav('home')"
         >
-          <button 
-            class="menu-toggle d-md-none" 
-            @click="toggleSidebar"
-            :class="{ 'active': sidebarActive }"
-          >
-            <i class="bi bi-list"></i>
-          </button>
-          
-          <div class="logo-section">
-            <div class="logo">АФИША</div>
+          <div class="nav-icon">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="4" y="4" width="10" height="10" rx="2" stroke="currentColor" stroke-width="2.1" fill="none"/>
+              <rect x="18" y="4" width="10" height="10" rx="2" stroke="currentColor" stroke-width="2.1" fill="none"/>
+              <rect x="4" y="18" width="10" height="10" rx="2" stroke="currentColor" stroke-width="2.1" fill="none"/>
+              <rect x="18" y="18" width="10" height="10" rx="2" stroke="currentColor" stroke-width="2.1" fill="none"/>
+            </svg>
           </div>
-          
-          <div class="nav-section">
-            <!-- Главная -->
-            <a 
-              href="#" 
-              class="nav-item"
-              :class="{ active: activeNav === 'home' }"
-              @click.prevent="setActiveNav('home')"
-            >
-              <div class="nav-icon">
-                <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <rect x="4" y="4" width="10" height="10" rx="2" stroke="currentColor" stroke-width="2.1" fill="none"/>
-                  <rect x="18" y="4" width="10" height="10" rx="2" stroke="currentColor" stroke-width="2.1" fill="none"/>
-                  <rect x="4" y="18" width="10" height="10" rx="2" stroke="currentColor" stroke-width="2.1" fill="none"/>
-                  <rect x="18" y="18" width="10" height="10" rx="2" stroke="currentColor" stroke-width="2.1" fill="none"/>
-                </svg>
-              </div>
-              <div class="nav-text">Главная</div>
-            </a>
-            
-            <!-- Мой календарь -->
-            <a 
-              href="#" 
-              class="nav-item"
-              :class="{ active: activeNav === 'calendar' }"
-              @click.prevent="setActiveNav('calendar')"
-            >
-              <div class="nav-icon">
-                <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <rect x="4" y="6" width="24" height="22" rx="3" stroke="currentColor" stroke-width="2" fill="none"/>
-                  <line x1="4" y1="12" x2="28" y2="12" stroke="currentColor" stroke-width="2"/>
-                  <circle cx="10" cy="18" r="1.5" fill="currentColor"/>
-                  <circle cx="16" cy="18" r="1.5" fill="currentColor"/>
-                  <circle cx="22" cy="18" r="1.5" fill="currentColor"/>
-                  <circle cx="10" cy="23" r="1.5" fill="currentColor"/>
-                  <circle cx="16" cy="23" r="1.5" fill="currentColor"/>
-                  <circle cx="22" cy="23" r="1.5" fill="currentColor"/>
-                  <path d="M10 3L10 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                  <path d="M22 3L22 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                </svg>
-              </div>
-              <div class="nav-text">Календарь</div>
-            </a>
+          <div class="nav-text">Главная</div>
+        </a>
+        
+        <!-- Мой календарь -->
+        <a 
+          href="#" 
+          class="nav-item"
+          :class="{ active: activeNav === 'calendar' }"
+          @click.prevent="setActiveNav('calendar')"
+        >
+          <div class="nav-icon">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="4" y="6" width="24" height="22" rx="3" stroke="currentColor" stroke-width="2" fill="none"/>
+              <line x1="4" y1="12" x2="28" y2="12" stroke="currentColor" stroke-width="2"/>
+              <circle cx="10" cy="18" r="1.5" fill="currentColor"/>
+              <circle cx="16" cy="18" r="1.5" fill="currentColor"/>
+              <circle cx="22" cy="18" r="1.5" fill="currentColor"/>
+              <circle cx="10" cy="23" r="1.5" fill="currentColor"/>
+              <circle cx="16" cy="23" r="1.5" fill="currentColor"/>
+              <circle cx="22" cy="23" r="1.5" fill="currentColor"/>
+              <path d="M10 3L10 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M22 3L22 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
           </div>
-          
-          <div class="logout-section">
-            <button class="logout-btn" @click="handleLogout">
-              <div class="logout-text">Выход</div>
-              <div class="logout-icon">
-                <i class="bi bi-box-arrow-right"></i>
-              </div>
-            </button>
+          <div class="nav-text">Календарь</div>
+        </a>
+      </div>
+      
+      <div class="logout-section">
+        <button class="logout-btn" @click="handleLogout">
+          <div class="logout-text">Выход</div>
+          <div class="logout-icon">
+            <i class="bi bi-box-arrow-right"></i>
+          </div>
+        </button>
+      </div>
+    </div>
+    
+    <!-- Основное содержимое -->
+    <div class="main-content" @click="closeSidebarOnMobile">
+      <!-- Шапка с поиском и аватаркой -->
+      <div class="header">
+        <div class="search-row">
+          <div class="search-wrapper">
+            <i class="bi bi-search search-icon"></i>
+            <input 
+              type="text" 
+              class="search-input" 
+              placeholder="Поиск по событиям"
+              v-model="searchQuery"
+              @keyup.enter="performSearch"
+            >
+          </div>
+          <div class="user-avatar">
+            <span>JD</span>
           </div>
         </div>
         
-        <!-- Основное содержимое -->
-        <div class="col-md-9 col-lg-10 main-content" @click="closeSidebarOnMobile">
-          <!-- Шапка с поиском и аватаркой -->
-          <div class="header">
-            <div class="search-row">
-              <div class="search-wrapper">
-                <i class="bi bi-search search-icon"></i>
-                <input 
-                  type="text" 
-                  class="search-input" 
-                  placeholder="Поиск по событиям"
-                  v-model="searchQuery"
-                  @keyup.enter="performSearch"
-                >
-              </div>
-              <div class="user-avatar">
-                <span>JD</span>
-              </div>
-            </div>
-            
-            <!-- Фильтры поиска -->
-            <div class="search-filters">
-              <button 
-                v-for="filter in filters" 
-                :key="filter.id"
-                class="filter-btn"
-                :class="{ active: activeFilter === filter.id }"
-                @click="setActiveFilter(filter.id)"
-              >
-                {{ filter.name }}
-              </button>
-            </div>
+        <!-- Фильтры поиска -->
+        <div class="search-filters">
+          <button 
+            v-for="filter in filters" 
+            :key="filter.id"
+            class="filter-btn"
+            :class="{ active: activeFilter === filter.id }"
+            @click="setActiveFilter(filter.id)"
+          >
+            {{ filter.name }}
+          </button>
+        </div>
+      </div>
+      
+      <!-- Контентная область -->
+      <div class="content-area">
+        <!-- Статистика -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-number">{{ stats.activeEvents }}</div>
+            <div class="stat-label">Активных событий</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">{{ stats.participants }}</div>
+            <div class="stat-label">Участников</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">{{ stats.newThisWeek }}</div>
+            <div class="stat-label">Новых за неделю</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">{{ stats.categories }}</div>
+            <div class="stat-label">Категорий</div>
+          </div>
+        </div>
+        
+        <!-- Ближайшие события -->
+        <div class="events-section">
+          <div class="section-header">
+            <h2 class="section-title">Ближайшие события</h2>
+            <a href="#" class="view-all" @click.prevent="viewAllEvents">Смотреть все</a>
           </div>
           
-          <!-- Контентная область -->
-          <div class="content-area">
-            <!-- Статистика -->
-            <div class="stats-grid">
-              <div class="stat-card">
-                <div class="stat-number">{{ stats.activeEvents }}</div>
-                <div class="stat-label">Активных событий</div>
-              </div>
-              <div class="stat-card">
-                <div class="stat-number">{{ stats.participants }}</div>
-                <div class="stat-label">Участников</div>
-              </div>
-              <div class="stat-card">
-                <div class="stat-number">{{ stats.newThisWeek }}</div>
-                <div class="stat-label">Новых за неделю</div>
-              </div>
-              <div class="stat-card">
-                <div class="stat-number">{{ stats.categories }}</div>
-                <div class="stat-label">Категорий</div>
-              </div>
-            </div>
-            
-            <!-- Ближайшие события -->
-            <div class="events-section">
-              <div class="section-header">
-                <h2 class="section-title">Ближайшие события</h2>
-                <a href="#" class="view-all" @click.prevent="viewAllEvents">Смотреть все</a>
-              </div>
-              
-              <!-- Сетка событий (превью) -->
-              <div class="events-grid">
-                <div 
-                  v-for="event in displayedEvents" 
-                  :key="event.id"
-                  class="event-preview"
-                  @click="openEventModal(event.id)"
-                >
-                  <img 
-                    :src="getEventImage(event)" 
-                    :alt="event.title" 
-                    class="event-preview__image"
-                    @error="handleImageError"
-                  >
-                  <div class="event-preview__content">
-                    <h3 class="event-preview__title">{{ event.title }}</h3>
-                    <div class="event-preview__date">
-                      <i class="bi bi-calendar"></i>
-                      {{ formatEventDate(event) }}
-                    </div>
-                  </div>
+          <div class="events-grid">
+            <div 
+              v-for="event in displayedEvents" 
+              :key="event.id"
+              class="event-preview"
+              @click="openEventModal(event.id)"
+            >
+              <img 
+                :src="getEventImage(event)" 
+                :alt="event.title" 
+                class="event-preview__image"
+                @error="handleImageError"
+              >
+              <div class="event-preview__content">
+                <h3 class="event-preview__title">{{ event.title }}</h3>
+                <div class="event-preview__date">
+                  <i class="bi bi-calendar"></i>
+                  {{ formatEventDate(event) }}
                 </div>
               </div>
             </div>
@@ -166,7 +156,7 @@
       </div>
     </div>
 
-    <!-- Модальное окно с детальным постом -->
+    <!-- Модальное окно -->
     <div 
       class="modal-overlay" 
       :class="{ active: modalActive }"
@@ -175,7 +165,7 @@
       <div class="modal-content">
         <div v-if="selectedEvent" class="post">
           <button class="post__close-btn" @click="closeModal">
-            <svg width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg width="24" height="24" viewBox="0 0 48 48" fill="none">
               <path fill-rule="evenodd" clip-rule="evenodd" d="M10.9397 10.94C11.2209 10.6591 11.6022 10.5013 11.9997 10.5013C12.3972 10.5013 12.7784 10.6591 13.0597 10.94L37.0597 34.94C37.207 35.0773 37.3252 35.2429 37.4072 35.4269C37.4892 35.6109 37.5333 35.8096 37.5368 36.011C37.5404 36.2124 37.5033 36.4124 37.4279 36.5992C37.3525 36.786 37.2402 36.9557 37.0977 37.0981C36.9553 37.2405 36.7856 37.3528 36.5989 37.4283C36.4121 37.5037 36.212 37.5408 36.0106 37.5372C35.8092 37.5337 35.6106 37.4896 35.4266 37.4076C35.2426 37.3256 35.077 37.2074 34.9397 37.06L10.9397 13.06C10.6588 12.7788 10.501 12.3975 10.501 12C10.501 11.6025 10.6588 11.2213 10.9397 10.94Z" fill="black"/>
               <path fill-rule="evenodd" clip-rule="evenodd" d="M37.0597 10.94C37.3406 11.2213 37.4984 11.6025 37.4984 12C37.4984 12.3975 37.3406 12.7788 37.0597 13.06L13.0597 37.06C12.7753 37.325 12.3993 37.4692 12.0106 37.4624C11.622 37.4555 11.2513 37.2981 10.9764 37.0233C10.7016 36.7484 10.5442 36.3777 10.5373 35.9891C10.5305 35.6005 10.6747 35.2244 10.9397 34.94L34.9397 10.94C35.2209 10.6591 35.6022 10.5013 35.9997 10.5013C36.3972 10.5013 36.7784 10.6591 37.0597 10.94Z" fill="black"/>
             </svg>
@@ -192,7 +182,7 @@
               <h3 class="post__title">{{ selectedEvent.title }}</h3>
               <ul class="post__details">
                 <li class="post__detail">
-                  <svg class="post__detail-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <svg class="post__detail-icon" viewBox="0 0 32 32" fill="none">
                     <path d="M5.88889 31.0002C5.09444 31.0002 4.41459 30.7165 3.84933 30.149C3.28407 29.5816 3.00096 28.8986 3 28.1002V7.80019C3 7.00269 3.28311 6.32022 3.84933 5.75279C4.41556 5.18535 5.09541 4.90115 5.88889 4.90019H7.33333V3.45019C7.33333 3.03935 7.472 2.69522 7.74933 2.41779C8.02667 2.14035 8.36948 2.00115 8.77778 2.00019C9.18607 1.99922 9.52937 2.13842 9.80767 2.41779C10.086 2.69715 10.2241 3.04129 10.2222 3.45019V4.90019H21.7778V3.45019C21.7778 3.03935 21.9164 2.69522 22.1938 2.41779C22.4711 2.14035 22.8139 2.00115 23.2222 2.00019C23.6305 1.99922 23.9738 2.13842 24.2521 2.41779C24.5304 2.69715 24.6686 3.04129 24.6667 3.45019V4.90019H26.1111C26.9056 4.90019 27.5859 5.18439 28.1521 5.75279C28.7183 6.32119 29.001 7.00365 29 7.80019V28.1002C29 28.8977 28.7174 29.5806 28.1521 30.149C27.5868 30.7174 26.9065 31.0011 26.1111 31.0002H5.88889ZM5.88889 28.1002H26.1111V13.6002H5.88889V28.1002Z" fill="#2B2B2B"/>
                   </svg>
                   <p class="post__detail-text">
@@ -201,7 +191,7 @@
                   </p>
                 </li>
                 <li class="post__detail">
-                  <svg class="post__detail-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <svg class="post__detail-icon" viewBox="0 0 32 32" fill="none">
                     <path d="M15.9997 28.4334C15.6886 28.4334 15.3775 28.3778 15.0663 28.2667C14.7552 28.1556 14.4775 27.9889 14.233 27.7667C12.7886 26.4334 11.5108 25.1334 10.3997 23.8667C9.28856 22.6 8.36101 21.3725 7.61701 20.184C6.87301 18.9956 6.30634 17.8511 5.91701 16.7507C5.52767 15.6502 5.33301 14.6 5.33301 13.6C5.33301 10.2667 6.40545 7.61113 8.55034 5.63335C10.6952 3.65558 13.1783 2.66669 15.9997 2.66669C18.821 2.66669 21.3046 3.65558 23.4503 5.63335C25.5961 7.61113 26.6681 10.2667 26.6663 13.6C26.6663 14.6 26.4721 15.6502 26.0837 16.7507C25.6952 17.8511 25.1286 18.9956 24.3837 20.184C23.6388 21.3725 22.7108 22.6 21.5997 23.8667C20.4886 25.1334 19.2108 26.4334 17.7663 27.7667C17.5219 27.9889 17.2441 28.1556 16.933 28.2667C16.6219 28.3778 16.3108 28.4334 15.9997 28.4334Z" fill="#9D2ACD"/>
                   </svg>
                   <p class="post__detail-text">{{ selectedEvent.location }}</p>
@@ -311,7 +301,7 @@ const eventsData = {
   2: {
     id: 2,
     title: 'Выставка современного искусства',
-    image: '',  // Заглушка
+    image: '',
     date: '15 ноября',
     time: '19:00-22:00',
     location: 'г. Москва, ул. Крымский Вал, 10 (Парк Горького)',
@@ -320,7 +310,7 @@ const eventsData = {
   3: {
     id: 3,
     title: 'Концерт классической музыки',
-    image: '',  // Заглушка
+    image: '',
     date: '20 ноября',
     time: '18:30-21:00',
     location: 'г. Москва, ул. Большая Никитская, 13/6 (Консерватория)',
@@ -329,7 +319,7 @@ const eventsData = {
   4: {
     id: 4,
     title: 'Мастер-класс по фотографии',
-    image: '',  // Заглушка
+    image: '',
     date: '25 ноября',
     time: '16:00-19:00',
     location: 'г. Москва, ул. Тверская, 15 (Фотошкола)',
@@ -345,26 +335,21 @@ const formatEventDate = (event) => {
   return `${event.date}, ${event.time.split('-')[0]}`
 }
 
-// Функция для получения изображения события (превью)
 const getEventImage = (event) => {
   if (event.image) {
     return event.image  
   }
-  // Для остальных - заглушка с градиентом
   return `https://via.placeholder.com/300x180/9D2ACD/ffffff?text=${encodeURIComponent(event.title)}`
 }
 
-// Функция для получения изображения в модальном окне
 const getModalImage = (event) => {
   if (event.image) {
     return event.image  
   }
-  // Для остальных - заглушка
   return `https://via.placeholder.com/500x400/9D2ACD/ffffff?text=${encodeURIComponent(event.title)}`
 }
 
 const handleImageError = (e) => {
-  // Если реальная картинка не загрузилась, показываем заглушку
   e.target.src = 'https://via.placeholder.com/300x180/9D2ACD/ffffff?text=Event'
 }
 
@@ -455,34 +440,30 @@ const registerForEvent = () => {
 }
 
 .app-container {
+  display: flex;
+  width: 100%;
+  height: 100vh;
   font-family: 'Gilroy', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   background-color: #F5F7FB;
-  color: var(--text-primary);
-  height: 100vh;
   overflow: hidden;
-}
-
-.container-fluid {
-  height: 100vh;
-  padding: 0;
-}
-
-.row {
-  height: 100%;
-  margin: 0;
 }
 
 /* Боковая панель */
 .sidebar {
+  width: 280px;
   background-color: #fff;
   height: 100%;
-  padding: 0;
   border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
   position: relative;
+  overflow-y: auto;
 }
 
 .logo-section {
   padding: 28px 20px 20px;
+  flex-shrink: 0;
 }
 
 .logo {
@@ -497,6 +478,11 @@ const registerForEvent = () => {
 }
 
 /* Навигация */
+.nav-section {
+  padding: 20px 0;
+  flex: 1;
+}
+
 .nav-item {
   padding: 10px 20px;
   display: flex;
@@ -504,14 +490,16 @@ const registerForEvent = () => {
   text-decoration: none;
   color: var(--text-primary);
   transition: all 0.2s;
-  position: relative;
   cursor: pointer;
+  width: 100%;
+  overflow: hidden;
 }
 
 .nav-item .nav-text {
   font-size: 22px;
   font-weight: 500;
   font-family: 'Gilroy', sans-serif;
+  white-space: nowrap;
 }
 
 .nav-item:hover {
@@ -539,6 +527,7 @@ const registerForEvent = () => {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 }
 
 .nav-icon svg {
@@ -556,26 +545,11 @@ const registerForEvent = () => {
   color: #909090;
 }
 
-.nav-section {
-  padding: 20px 0;
-}
-
-.nav-title {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--text-secondary);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  padding: 0 20px 12px;
-}
-
 /* Кнопка выхода */
 .logout-section {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
   padding: 20px;
+  flex-shrink: 0;
+  margin-top: auto;
 }
 
 .logout-btn {
@@ -611,15 +585,16 @@ const registerForEvent = () => {
 
 /* Основное содержимое */
 .main-content {
-  height: 100%;
-  padding: 0;
-  overflow-y: auto;
+  flex: 1;
   display: flex;
   flex-direction: column;
+  overflow-y: auto;
+  height: 100vh;
 }
 
 .header {
   padding: 24px 32px;
+  flex-shrink: 0;
 }
 
 /* Строка с поиском и аватаркой */
@@ -792,7 +767,6 @@ const registerForEvent = () => {
   gap: 20px;
 }
 
-/* Стили для превью событий на главной */
 .event-preview {
   background-color: #fff;
   border: 1px solid var(--border-color);
@@ -838,7 +812,7 @@ const registerForEvent = () => {
   font-size: 14px;
 }
 
-/* Модальное окно с детальным постом */
+/* Модальное окно */
 .modal-overlay {
   display: none;
   position: fixed;
@@ -884,7 +858,6 @@ const registerForEvent = () => {
   justify-content: center;
 }
 
-/* Контейнер для содержимого */
 .post__wrapper {
   display: flex;
   flex-direction: row;
@@ -913,7 +886,6 @@ const registerForEvent = () => {
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
 }
 
-/* Картинка */
 .post__image {
   width: 300px;
   height: 300px;
@@ -1004,7 +976,6 @@ const registerForEvent = () => {
   color: #9333EA;
 }
 
-/* Кнопка Зарегистрироваться */
 .post__action-btn {
   background-color: #D4D4D4;
   border: 0;
@@ -1027,7 +998,6 @@ const registerForEvent = () => {
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
-/* Меню-бургер */
 .menu-toggle {
   display: none;
   position: absolute;
@@ -1044,7 +1014,6 @@ const registerForEvent = () => {
   cursor: pointer;
 }
 
-/* Адаптивность */
 @media (max-width: 1200px) {
   .post {
     min-width: 900px;
@@ -1065,9 +1034,9 @@ const registerForEvent = () => {
 
 @media (max-width: 992px) {
   .sidebar {
-    width: 300px;
     position: fixed;
-    left: -300px;
+    left: -280px;
+    top: 0;
     z-index: 1000;
     transition: left 0.3s;
   }
@@ -1082,10 +1051,6 @@ const registerForEvent = () => {
   
   .menu-toggle {
     display: block;
-  }
-  
-  .post {
-    max-width: 100%;
   }
   
   .modal-content {
