@@ -2,10 +2,7 @@
   <div class="app-container">
     <!-- Боковая панель -->
     <div class="sidebar" :class="{ 'active': sidebarActive }">
-      <button 
-        class="menu-toggle d-md-none" 
-        @click="toggleSidebar"
-      >
+      <button class="menu-toggle d-md-none" @click="toggleSidebar">
         <i class="bi bi-list"></i>
       </button>
       
@@ -14,7 +11,6 @@
       </div>
       
       <div class="nav-section">
-        <!-- Главная -->
         <a 
           href="#" 
           class="nav-item"
@@ -22,7 +18,7 @@
           @click.prevent="setActiveNav('home')"
         >
           <div class="nav-icon">
-            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
               <rect x="4" y="4" width="10" height="10" rx="2" stroke="currentColor" stroke-width="2.1" fill="none"/>
               <rect x="18" y="4" width="10" height="10" rx="2" stroke="currentColor" stroke-width="2.1" fill="none"/>
               <rect x="4" y="18" width="10" height="10" rx="2" stroke="currentColor" stroke-width="2.1" fill="none"/>
@@ -32,7 +28,6 @@
           <div class="nav-text">Главная</div>
         </a>
         
-        <!-- Мой календарь -->
         <a 
           href="#" 
           class="nav-item"
@@ -40,7 +35,7 @@
           @click.prevent="setActiveNav('calendar')"
         >
           <div class="nav-icon">
-            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
               <rect x="4" y="6" width="24" height="22" rx="3" stroke="currentColor" stroke-width="2" fill="none"/>
               <line x1="4" y1="12" x2="28" y2="12" stroke="currentColor" stroke-width="2"/>
               <circle cx="10" cy="18" r="1.5" fill="currentColor"/>
@@ -69,7 +64,6 @@
     
     <!-- Основное содержимое -->
     <div class="main-content" @click="closeSidebarOnMobile">
-      <!-- Шапка с поиском и аватаркой -->
       <div class="header">
         <div class="search-row">
           <div class="search-wrapper">
@@ -87,7 +81,6 @@
           </div>
         </div>
         
-        <!-- Фильтры поиска -->
         <div class="search-filters">
           <button 
             v-for="filter in filters" 
@@ -101,9 +94,7 @@
         </div>
       </div>
       
-      <!-- Контентная область -->
       <div class="content-area">
-        <!-- Статистика -->
         <div class="stats-grid">
           <div class="stat-card">
             <div class="stat-number">{{ stats.activeEvents }}</div>
@@ -123,7 +114,6 @@
           </div>
         </div>
         
-        <!-- Ближайшие события -->
         <div class="events-section">
           <div class="section-header">
             <h2 class="section-title">Ближайшие события</h2>
@@ -137,12 +127,26 @@
               class="event-preview"
               @click="openEventModal(event.id)"
             >
-              <img 
-                :src="getEventImage(event)" 
-                :alt="event.title" 
-                class="event-preview__image"
-                @error="handleImageError"
-              >
+              <div class="event-preview__image-wrapper">
+                <img 
+                  v-if="event.image" 
+                  :src="event.image" 
+                  :alt="event.title" 
+                  class="event-preview__image"
+                  @error="handleImageError"
+                >
+                <div v-else class="event-preview__placeholder" :style="{ background: getPlaceholderGradient(event.id) }">
+                  <div class="placeholder-icon">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M3 9L12 3L21 9L12 15L3 9Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                      <path d="M3 15L12 21L21 15" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                      <path d="M12 15V21" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                      <path d="M7 12L12 15L17 12" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </div>
+                  <div class="placeholder-text">{{ getEventCategory(event.title) }}</div>
+                </div>
+              </div>
               <div class="event-preview__content">
                 <h3 class="event-preview__title">{{ event.title }}</h3>
                 <div class="event-preview__date">
@@ -172,12 +176,26 @@
           </button>
           
           <div class="post__wrapper">
-            <img 
-              class="post__image" 
-              :src="getModalImage(selectedEvent)" 
-              :alt="selectedEvent.title"
-              @error="handleModalImageError"
-            >
+            <div class="post__image-wrapper">
+              <img 
+                v-if="selectedEvent.image" 
+                class="post__image" 
+                :src="selectedEvent.image" 
+                :alt="selectedEvent.title"
+                @error="handleModalImageError"
+              >
+              <div v-else class="post__placeholder" :style="{ background: getPlaceholderGradient(selectedEvent.id) }">
+                <div class="placeholder-icon-large">
+                  <svg width="80" height="80" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3 9L12 3L21 9L12 15L3 9Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                    <path d="M3 15L12 21L21 15" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                    <path d="M12 15V21" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M7 12L12 15L17 12" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+                <div class="placeholder-text-large">{{ getEventCategory(selectedEvent.title) }}</div>
+              </div>
+            </div>
             <div class="post__content">
               <h3 class="post__title">{{ selectedEvent.title }}</h3>
               <ul class="post__details">
@@ -275,7 +293,7 @@ const setActiveFilter = (filterId) => {
 
 const performSearch = () => {
   if (searchQuery.value.trim()) {
-    alert(`Поиск: "${searchQuery.value}"\n\nРезультаты поиска будут отображены здесь.`)
+    alert(`Поиск: "${searchQuery.value}"`)
   }
 }
 
@@ -292,7 +310,7 @@ const eventsData = {
   1: {
     id: 1,
     title: 'Турнир по армрестлингу',
-    image: '/media/post_img_1.png',  
+    image: '/media/post_img_1.png',
     date: '7 ноября',
     time: '12:00-17:00',
     location: 'г. Москва, Измайловское шоссе 71, корпус 2Б (Гостиница Измайлово, корпус Бета)',
@@ -327,6 +345,26 @@ const eventsData = {
   }
 }
 
+// Цвета для заглушек
+const placeholderGradients = [
+  'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+  'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+  'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+  'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)'
+]
+
+const getPlaceholderGradient = (id) => {
+  return placeholderGradients[(id - 1) % placeholderGradients.length]
+}
+
+const getEventCategory = (title) => {
+  if (title.includes('Турнир') || title.includes('армрестлинг')) return 'СПОРТ'
+  if (title.includes('Выставка')) return 'ИСКУССТВО'
+  if (title.includes('Концерт')) return 'МУЗЫКА'
+  if (title.includes('Мастер-класс')) return 'ОБУЧЕНИЕ'
+  return 'СОБЫТИЕ'
+}
+
 const displayedEvents = computed(() => {
   return Object.values(eventsData)
 })
@@ -335,26 +373,14 @@ const formatEventDate = (event) => {
   return `${event.date}, ${event.time.split('-')[0]}`
 }
 
-const getEventImage = (event) => {
-  if (event.image) {
-    return event.image  
-  }
-  return `https://via.placeholder.com/300x180/9D2ACD/ffffff?text=${encodeURIComponent(event.title)}`
-}
-
-const getModalImage = (event) => {
-  if (event.image) {
-    return event.image  
-  }
-  return `https://via.placeholder.com/500x400/9D2ACD/ffffff?text=${encodeURIComponent(event.title)}`
-}
-
 const handleImageError = (e) => {
-  e.target.src = 'https://via.placeholder.com/300x180/9D2ACD/ffffff?text=Event'
+  e.target.style.display = 'none'
+  e.target.parentElement.querySelector('.event-preview__placeholder').style.display = 'flex'
 }
 
 const handleModalImageError = (e) => {
-  e.target.src = 'https://via.placeholder.com/500x400/9D2ACD/ffffff?text=Event'
+  e.target.style.display = 'none'
+  e.target.parentElement.querySelector('.post__placeholder').style.display = 'flex'
 }
 
 // ========== МОДАЛЬНОЕ ОКНО ==========
@@ -374,7 +400,6 @@ const closeModal = () => {
   document.body.style.overflow = ''
 }
 
-// Закрытие по Escape
 onMounted(() => {
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && modalActive.value) {
@@ -424,7 +449,6 @@ const registerForEvent = () => {
 
 :root {
   --primary-color: #ef5dd9;
-  --sidebar-bg: #F8F9FA;
   --border-color: #E5E7EB;
   --text-primary: #111827;
   --text-secondary: #6B7280;
@@ -442,10 +466,8 @@ const registerForEvent = () => {
 .app-container {
   display: flex;
   width: 100%;
-  height: 100vh;
-  font-family: 'Gilroy', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  min-height: 100vh; 
   background-color: #F5F7FB;
-  overflow: hidden;
 }
 
 /* Боковая панель */
@@ -458,7 +480,6 @@ const registerForEvent = () => {
   flex-direction: column;
   flex-shrink: 0;
   position: relative;
-  overflow-y: auto;
 }
 
 .logo-section {
@@ -470,46 +491,58 @@ const registerForEvent = () => {
   font-size: 48px;
   font-weight: 600;
   color: black;
-  letter-spacing: -0.5px;
-  margin-bottom: 4px;
   text-align: center;
   font-family: 'Gilroy', sans-serif;
   line-height: 1.2;
 }
 
-/* Навигация */
 .nav-section {
   padding: 20px 0;
   flex: 1;
 }
 
 .nav-item {
+  position: relative;
   padding: 10px 20px;
   display: flex;
   align-items: center;
   text-decoration: none;
   color: var(--text-primary);
-  transition: all 0.2s;
+  transition: all 0.25s ease;
   cursor: pointer;
   width: 100%;
-  overflow: hidden;
 }
 
 .nav-item .nav-text {
   font-size: 22px;
   font-weight: 500;
   font-family: 'Gilroy', sans-serif;
-  white-space: nowrap;
 }
 
 .nav-item:hover {
   background-color: rgba(0, 0, 0, 0.03);
 }
 
+.nav-item::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 8px;
+  bottom: 8px;
+  width: 4px;
+  background: var(--active-color);
+  border-radius: 0 4px 4px 0;
+  opacity: 0;
+  transition: 0.2s;
+}
+
+/* Активный пункт меню */
+.nav-item.active::before {
+  opacity: 1;
+}
+
 .nav-item.active {
-  background-color: rgba(139, 92, 246, 0.08);
-  color: var(--active-color);
-  border-left: 3px solid var(--active-color);
+  background-color: #F5F7FB;
 }
 
 .nav-item.active .nav-icon svg {
@@ -541,11 +574,6 @@ const registerForEvent = () => {
   transition: color 0.2s;
 }
 
-.nav-item:not(.active):nth-child(2) .nav-icon svg {
-  color: #909090;
-}
-
-/* Кнопка выхода */
 .logout-section {
   padding: 20px;
   flex-shrink: 0;
@@ -563,7 +591,6 @@ const registerForEvent = () => {
   color: var(--text-secondary);
   font-size: 22px;
   width: 100%;
-  transition: all 0.2s;
   cursor: pointer;
 }
 
@@ -588,8 +615,7 @@ const registerForEvent = () => {
   flex: 1;
   display: flex;
   flex-direction: column;
-  overflow-y: auto;
-  height: 100vh;
+  width: 100%;
 }
 
 .header {
@@ -597,7 +623,6 @@ const registerForEvent = () => {
   flex-shrink: 0;
 }
 
-/* Строка с поиском и аватаркой */
 .search-row {
   display: flex;
   align-items: center;
@@ -619,8 +644,6 @@ const registerForEvent = () => {
   font-size: 22px;
   color: var(--text-primary);
   background-color: #fff;
-  transition: all 0.2s;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   font-family: 'Gilroy', sans-serif;
   font-weight: 500;
 }
@@ -628,14 +651,6 @@ const registerForEvent = () => {
 .search-input:focus {
   outline: none;
   border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px rgba(239, 93, 217, 0.15), 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.search-input::placeholder {
-  font-weight: 500;
-  font-family: 'Gilroy', sans-serif;
-  color: var(--text-secondary);
-  font-size: 22px;
 }
 
 .search-icon {
@@ -645,14 +660,13 @@ const registerForEvent = () => {
   transform: translateY(-50%);
   color: var(--text-secondary);
   font-size: 24px;
-  z-index: 1;
 }
 
-/* Аватарка пользователя */
+/* Аватарка пользователя - темно-синяя */
 .user-avatar {
   width: 56px;
   height: 56px;
-  background: linear-gradient(135deg, var(--primary-color), #b339a0);
+  background: linear-gradient(135deg, #1e2a5e, #0f172a);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -660,20 +674,16 @@ const registerForEvent = () => {
   color: white;
   font-weight: 600;
   font-size: 20px;
-  font-family: 'Gilroy', sans-serif;
-  box-shadow: 0 4px 12px rgba(239, 93, 217, 0.3);
-  border: 2px solid white;
-  cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
   flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  transition: transform 0.2s;
 }
 
 .user-avatar:hover {
   transform: scale(1.05);
-  box-shadow: 0 6px 16px rgba(239, 93, 217, 0.4);
 }
 
-/* Фильтры поиска */
 .search-filters {
   display: flex;
   gap: 12px;
@@ -688,13 +698,7 @@ const registerForEvent = () => {
   border-radius: 20px;
   color: var(--text-secondary);
   font-size: 14px;
-  font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s;
-}
-
-.filter-btn:hover {
-  background-color: #E5E7EB;
 }
 
 .filter-btn.active {
@@ -703,7 +707,6 @@ const registerForEvent = () => {
   border-color: var(--primary-color);
 }
 
-/* Контентная область */
 .content-area {
   padding: 0 32px 32px;
   flex: 1;
@@ -721,7 +724,6 @@ const registerForEvent = () => {
   border: 1px solid var(--border-color);
   border-radius: 12px;
   padding: 24px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 .stat-number {
@@ -757,7 +759,6 @@ const registerForEvent = () => {
   font-size: 14px;
   color: var(--primary-color);
   text-decoration: none;
-  font-weight: 500;
   cursor: pointer;
 }
 
@@ -772,21 +773,56 @@ const registerForEvent = () => {
   border: 1px solid var(--border-color);
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-  transition: transform 0.2s, box-shadow 0.2s;
   cursor: pointer;
+  transition: transform 0.2s;
 }
 
 .event-preview:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.event-preview__image-wrapper {
+  width: 100%;
+  height: 140px;
+  position: relative;
+  overflow: hidden;
 }
 
 .event-preview__image {
   width: 100%;
-  height: 140px;
+  height: 100%;
   object-fit: cover;
-  background-color: #E5E7EB;
+}
+
+.event-preview__placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+}
+
+.placeholder-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.9;
+}
+
+.placeholder-text {
+  font-size: 12px;
+  font-weight: 600;
+  color: white;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-family: 'Gilroy', sans-serif;
 }
 
 .event-preview__content {
@@ -806,10 +842,6 @@ const registerForEvent = () => {
   display: flex;
   align-items: center;
   gap: 4px;
-}
-
-.event-preview__date i {
-  font-size: 14px;
 }
 
 /* Модальное окно */
@@ -832,10 +864,10 @@ const registerForEvent = () => {
 }
 
 .modal-content {
-  max-width: 1100px;
+  max-width: 1200px;
   width: 100%;
   max-height: 90vh;
-  overflow-y: auto;
+  overflow: visible;
   border-radius: 40px;
   background: transparent;
 }
@@ -848,11 +880,11 @@ const registerForEvent = () => {
   background-size: cover;
   background-position: center;
   border-radius: 40px;
-  line-height: 1.5;
-  width: 100%;
   box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
-  min-width: 1000px;
-  min-height: 700px;
+
+  width: 100%;
+  max-width: 1000px;
+
   display: flex;
   align-items: center;
   justify-content: center;
@@ -860,7 +892,6 @@ const registerForEvent = () => {
 
 .post__wrapper {
   display: flex;
-  flex-direction: row;
   gap: 50px;
   width: 100%;
   max-width: 900px;
@@ -878,27 +909,57 @@ const registerForEvent = () => {
   background-color: white;
   border-radius: 50%;
   cursor: pointer;
-  z-index: 10;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.3s;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+.post__image-wrapper {
+  width: 300px;
+  height: 300px;
+  flex-shrink: 0;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
 }
 
 .post__image {
-  width: 300px;
-  height: 300px;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
-  border-radius: 20px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+.post__placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+}
+
+.placeholder-icon-large {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.9;
+}
+
+.placeholder-text-large {
+  font-size: 16px;
+  font-weight: 600;
+  color: white;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 6px 14px;
+  border-radius: 25px;
 }
 
 .post__content {
   flex: 1;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
 }
 
 .post__title {
@@ -906,14 +967,11 @@ const registerForEvent = () => {
   margin-bottom: 25px;
   font-weight: 800;
   color: #222;
-  line-height: 1.2;
 }
 
 .post__details {
   list-style: none;
   margin-bottom: 25px;
-  padding: 0;
-  width: 100%;
 }
 
 .post__detail {
@@ -921,7 +979,6 @@ const registerForEvent = () => {
   gap: 15px;
   margin-bottom: 15px;
   align-items: flex-start;
-  width: 100%;
 }
 
 .post__detail-icon {
@@ -935,67 +992,46 @@ const registerForEvent = () => {
   line-height: 1.5;
   color: #333;
   margin: 0;
-  width: calc(100% - 43px);
-  word-wrap: break-word;
 }
 
 .post__date {
   font-size: 18px;
   font-weight: 600;
-  width: 100%;
   color: #222;
 }
 
-.post__description {
-  margin-bottom: 25px;
-  width: 100%;
-}
-
 .post__description-text {
-  font-size: 20px;
-  margin-bottom: 15px;
+  font-size: 18px;
   line-height: 1.6;
   color: #444;
-  width: 100%;
-  word-wrap: break-word;
+  margin-bottom: 15px;
 }
 
 .post__more-btn {
-  background-color: transparent;
-  border: 0;
-  font-size: 18px;
-  padding-left: 0;
+  background: transparent;
+  border: none;
+  font-size: 16px;
   color: #666;
   text-decoration: underline;
   cursor: pointer;
-  font-weight: 500;
-  margin-bottom: 10px;
-}
-
-.post__more-btn:hover {
-  color: #9333EA;
+  margin-bottom: 15px;
 }
 
 .post__action-btn {
-  background-color: #D4D4D4;
-  border: 0;
-  font-size: 20px;
+  background: var(--purple-btn);
+  border: none;
+  font-size: 18px;
   font-weight: 600;
-  padding: 15px 40px;
+  padding: 12px 35px;
   border-radius: 50px;
-  color: #333;
+  color: white;
   cursor: pointer;
   transition: all 0.3s;
-  align-self: flex-start;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-  border: none;
-  width: auto;
 }
 
 .post__action-btn:hover {
-  background-color: #c0c0c0;
+  background: var(--active-color);
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
 .menu-toggle {
@@ -1014,24 +1050,8 @@ const registerForEvent = () => {
   cursor: pointer;
 }
 
-@media (max-width: 1200px) {
-  .post {
-    min-width: 900px;
-    min-height: 650px;
-    padding: 50px;
-  }
-  
-  .post__wrapper {
-    max-width: 800px;
-    gap: 40px;
-  }
-  
-  .post__image {
-    width: 280px;
-    height: 280px;
-  }
-}
 
+/* Адаптивность */
 @media (max-width: 992px) {
   .sidebar {
     position: fixed;
@@ -1053,10 +1073,6 @@ const registerForEvent = () => {
     display: block;
   }
   
-  .modal-content {
-    max-width: 95%;
-  }
-  
   .post {
     min-width: auto;
     min-height: auto;
@@ -1064,21 +1080,12 @@ const registerForEvent = () => {
   }
   
   .post__wrapper {
-    max-width: 100%;
-    gap: 30px;
+    flex-direction: column;
   }
   
-  .post__image {
+  .post__image-wrapper {
     width: 250px;
     height: 250px;
-  }
-  
-  .post__description-text {
-    font-size: 18px;
-  }
-  
-  .post__detail-text {
-    width: calc(100% - 43px);
   }
 }
 
@@ -1095,28 +1102,7 @@ const registerForEvent = () => {
     font-size: 42px;
   }
   
-  .nav-item .nav-text,
-  .logout-btn .logout-text {
-    font-size: 20px;
-  }
-  
   .search-input {
-    font-size: 20px;
-    padding: 14px 20px 14px 50px;
-  }
-  
-  .search-input::placeholder {
-    font-size: 20px;
-  }
-  
-  .search-icon {
-    left: 20px;
-    font-size: 22px;
-  }
-  
-  .user-avatar {
-    width: 48px;
-    height: 48px;
     font-size: 18px;
   }
   
@@ -1128,88 +1114,19 @@ const registerForEvent = () => {
     grid-template-columns: 1fr;
   }
   
-  .modal-overlay {
-    padding: 20px;
-  }
-  
   .post {
     padding: 30px;
   }
   
-  .post__wrapper {
-    flex-direction: column;
-    gap: 25px;
-  }
-  
-  .post__image {
-    width: 220px;
-    height: 220px;
-  }
-  
-  .post__close-btn {
-    top: 20px;
-    right: 20px;
-    width: 40px;
-    height: 40px;
-  }
-  
-  .post__description-text {
-    font-size: 18px;
+  .post__image-wrapper {
+    width: 200px;
+    height: 200px;
   }
   
   .post__action-btn {
-    align-self: stretch;
-    text-align: center;
     width: 100%;
   }
-  
-  .post__detail-text {
-    width: calc(100% - 43px);
-  }
-}
 
-@media (max-width: 576px) {
-  .logo {
-    font-size: 36px;
-  }
-  
-  .nav-item .nav-text,
-  .logout-btn .logout-text {
-    font-size: 18px;
-  }
-  
-  .search-row {
-    gap: 10px;
-  }
-  
-  .search-input {
-    font-size: 18px;
-    padding: 12px 16px 12px 45px;
-  }
-  
-  .search-input::placeholder {
-    font-size: 18px;
-  }
-  
-  .search-icon {
-    font-size: 20px;
-    left: 15px;
-  }
-  
-  .user-avatar {
-    width: 44px;
-    height: 44px;
-    font-size: 16px;
-  }
-  
-  .stats-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .search-filters {
-    overflow-x: auto;
-    padding-bottom: 8px;
-    flex-wrap: nowrap;
-  }
+
 }
 </style>
